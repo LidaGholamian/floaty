@@ -1,5 +1,5 @@
+import TransferAnimation from "@/features/transfer/components/transferAnimation";
+
 export default function TransferPage() {
-  return (
-    <p>transfer</p>
-  );
+  return <TransferAnimation />;
 }
