@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fa" dir="rtl" className={`${vazirmatn.variable} ${figtree.variable}`}>
+    <html lang="en" className={`${vazirmatn.variable} ${figtree.variable}`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

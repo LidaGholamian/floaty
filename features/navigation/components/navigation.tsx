@@ -30,10 +30,10 @@ export default function Navigation() {
       {/* Auth */}
       <div className="flex items-center justify-end gap-1">
         <Link
-          href="/login"
+          href="/register"
           className="rounded-full bg-accent px-4 py-2 text-sm text-background transition-all duration-300 hover:bg-accent-light"
         >
-          ورود / ثبت‌نام
+          Login/Register
         </Link>
       </div>
     </nav>
