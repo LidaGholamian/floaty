@@ -317,3 +317,24 @@ body {
     transform: translate(-50%, 0) scale(1);
   }
 }
+
+
+.media-background {
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(167, 139, 250, 0.35), transparent 35%),
+    radial-gradient(circle at 70% 70%, rgba(99, 102, 241, 0.25), transparent 35%),
+    #0b0d12;
+  animation: media-background-move 12s ease-in-out infinite alternate;
+}
+
+@keyframes media-background-move {
+  0% {
+    transform: translate(-4%, -3%) scale(1);
+  }
+
+  100% {
+    transform: translate(4%, 3%) scale(1.08);
+  }
+}

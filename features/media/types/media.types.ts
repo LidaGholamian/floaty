@@ -1,10 +1,7 @@
-export type MediaPreviewState =
-  | "entering"
-  | "preview"
-  | "resting"
-  | "selected";
+export type MediaPreviewState = "resting" | "selected";
 
 export type MediaPreviewProps = {
+  id: number;
   src: string;
   alt: string;
   state: MediaPreviewState;
@@ -12,6 +9,7 @@ export type MediaPreviewProps = {
 };
 
 export type MediaDetailProps = {
+  id: number;
   image: string;
   artist: string;
   title: string;

@@ -1,71 +1,76 @@
 "use client";
 
-import { MEDIA_PREVIEWS } from "../constants/media.constants";
+import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { MediaPreviewState } from "../types/media.types";
-import MediaPreview from "./mediasPreview";
+
+import { MEDIA_PREVIEWS } from "../constants/media.constants";
 import MediaDetail from "./mediaDetail";
+import MediaPreview from "./mediaPreview";
+import PhoneDisplay from "./phoneDisplay";
+import AccountWidget from "./accountWidget";
 
 export default function MediaAnimation() {
+  const [selectedPreviewId, setSelectedPreviewId] = useState<number | null>(
+    null,
+  );
 
-  const [selectedPreviewId, setSelectedPreviewId] = useState<number | null>(null);
-  const [previewStates, setPreviewStates] = useState<
-    Record<number, MediaPreviewState>
-  >(
-    Object.fromEntries(
-      MEDIA_PREVIEWS.map((preview) => [
-        preview.id,
-        preview.id === 1 ? "preview" : "resting",
-      ]),
-    ),
+  const [expandedPreviewId, setExpandedPreviewId] = useState<number | null>(
+    null,
   );
 
   const handleSelectPreview = (id: number) => {
+    if (selectedPreviewId === id) {
+      setExpandedPreviewId(id);
+      return;
+    }
+
     setSelectedPreviewId(id);
-
-    setPreviewStates(
-      Object.fromEntries(
-        MEDIA_PREVIEWS.map((item) => [
-          item.id,
-          item.id === id ? "selected" : "resting",
-        ]),
-      ),
-    );
-  };
-
-  const handlePreviewAnimation = (id: number) => {
-    setPreviewStates((current) => ({
-      ...current,
-      [id]: "preview",
-    }));
   };
 
   const selectedPreview = MEDIA_PREVIEWS.find(
-    (preview) => preview.id === selectedPreviewId,
+    (preview) => preview.id === expandedPreviewId,
   );
 
   return (
     <section className="flex min-h-[70vh] items-center justify-center">
-      <div className="relative my-2 h-120 w-75 overflow-hidden rounded-[40px] border border-white/10 bg-zinc-200 sm:h-137.5">
-        {selectedPreview ? (
-          <MediaDetail
-            image={selectedPreview.src}
-            artist={selectedPreview.artist}
-            title={selectedPreview.title}
-          />
-        ) : (
-          <div className="absolute inset-y-0 left-1/2 flex -translate-x-1/2 -translate-y-2 flex-col items-center justify-center gap-2">
-            {MEDIA_PREVIEWS.map((preview) => (
-              <MediaPreview
-                key={preview.id}
-                src={preview.src}
-                alt={preview.alt}
-                state={previewStates[preview.id]}
-                onClick={() => handleSelectPreview(preview.id)}
-              />
-            ))}
-          </div>
-        )}
+      <div className="relative my-2 h-120 w-75 overflow-hidden rounded-[40px] border border-white/10 sm:h-137.5">
+        {/* Animated background */}
+        <div className="absolute inset-0 overflow-hidden rounded-[40px]">
+          <div className="media-background" />
+        </div>
+
+        <PhoneDisplay />
+        <AccountWidget />
+
+        <AnimatePresence mode="wait">
+          {selectedPreview ? (
+            <MediaDetail
+              key="detail"
+              id={selectedPreview.id}
+              image={selectedPreview.src}
+              artist={selectedPreview.artist}
+              title={selectedPreview.title}
+            />
+          ) : (
+            <div
+              key="previews"
+              className="absolute inset-y-0 left-1/2 flex -translate-x-1/2 -translate-y-2 flex-col items-center justify-center gap-2"
+            >
+              {MEDIA_PREVIEWS.map((preview) => (
+                <MediaPreview
+                  key={preview.id}
+                  id={preview.id}
+                  src={preview.src}
+                  alt={preview.alt}
+                  state={
+                    selectedPreviewId === preview.id ? "selected" : "resting"
+                  }
+                  onClick={() => handleSelectPreview(preview.id)}
+                />
+              ))}
+            </div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );

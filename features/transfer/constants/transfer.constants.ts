@@ -24,13 +24,13 @@ export const TRANSFER_PARTICIPANTS: Record<
 
 export const TRANSFER_LAYOUT = {
   avatarSize: 80,
-  knobSize: 38,
+  knobSize: 78,
   gap: 112,
   gooPadding: 36,
 } as const;
 
 export const TRANSFER_TIMING = {
   initialDelayMs: 1000,
-  travelDuration: 3.6,
+  travelDuration: 17,
   holdMs: 900,
 } as const;

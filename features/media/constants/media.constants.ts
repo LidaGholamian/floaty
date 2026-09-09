@@ -36,26 +36,37 @@ export const MEDIA_PREVIEWS = [
   },
 ] as const;
 
-
 export const previewVariants = {
-  entering: {
-    width: 80,
-    height: 80,
-    borderRadius: "9999px",
-  },
-  preview: {
-    width: 96,
-    height: 96,
-    borderRadius: "24px",
-  },
   resting: {
     width: 80,
     height: 80,
     borderRadius: "9999px",
   },
+
   selected: {
-    width: 128,
-    height: 128,
+    width: 96,
+    height: 96,
     borderRadius: "24px",
   },
+} as const;
+
+export const previewEntranceVariants = {
+  hidden: {
+    y: 80,
+    opacity: 0,
+    scale: 0.85,
+  },
+
+  visible: {
+    y: 0,
+    opacity: 1,
+    scale: 1,
+  },
+} as const;
+
+export const previewTransition = {
+  type: "spring",
+  stiffness: 90,
+  damping: 24,
+  mass: 1,
 } as const;

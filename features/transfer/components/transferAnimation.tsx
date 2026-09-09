@@ -178,7 +178,7 @@ export default function TransferAnimation() {
         </div>
 
         <motion.div
-          className="pointer-events-none absolute z-30 flex items-center justify-center text-white"
+          className="pointer-events-none absolute z-10 flex items-center justify-center text-white"
           style={{
             width: knobSize,
             height: knobSize,
