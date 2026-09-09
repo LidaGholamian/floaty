@@ -1,3 +1,3 @@
-export * from "./temperatureKnob";
-export * from "./thermometerScale";
-export * from "./thermometer";
+export { default as Thermometer } from "./thermometer";
+export { default as TemperatureKnob } from "./temperatureKnob";
+export { default as ThermometerScale } from "./thermometerScale";
