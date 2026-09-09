@@ -1,7 +1,9 @@
-export default function Temperature() {
+import Thermometer from "@/features/temprature/components/thermometer";
+
+export default function TemperaturePage() {
   return (
-    <div>
-      <h1>Temperature</h1>
-    </div>
+    <main className="flex h-[calc(100vh-80px)] items-center justify-center">
+      <Thermometer />
+    </main>
   );
 }

@@ -3,7 +3,7 @@ import { NAV_ITEMS } from "../constants/navigation.constants";
 
 export default function Navigation() {
   return (
-    <nav className="grid grid-cols-3 items-center rounded-full border border-border bg-surface/80 p-1.5 backdrop-blur-md">
+    <nav className="grid grid-cols-3 mx-auto items-center rounded-full border border-border bg-surface/80 p-1.5 backdrop-blur-md">
       {/* Logo */}
       <Link
         href="/"

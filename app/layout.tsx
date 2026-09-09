@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Vazirmatn, Figtree } from "next/font/google";
 import "./globals.css";
+import Navigation from "@/features/navigation/components/navigation";
 
 const figtree = Figtree({
   display: "swap",
@@ -24,7 +25,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${vazirmatn.variable} ${figtree.variable}`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Navigation />
+        {children}</body>
     </html>
   );
 }

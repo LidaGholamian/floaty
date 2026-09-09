@@ -1,178 +1,231 @@
 "use client";
 
-import Image from "next/image";
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect } from "react";
-
-const avatars = {
-  sender: "/images/avatar-1.webp",
-  receiver: "/images/avatar-2.webp",
-};
+import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import {
+  TRANSFER_LAYOUT,
+  TRANSFER_PARTICIPANTS,
+  TRANSFER_TIMING,
+} from "../constants/transfer.constants";
+import TransferAvatar from "./transferAvatar";
+import TransferGooFilter from "./transferGooFilter";
+import TransferToolbar from "./transferToolbar";
 
 export default function TransferAnimation() {
-  const bubbleX = useMotionValue(4);
+  const reducedMotion = useReducedMotion();
+  const progress = useMotionValue(0);
 
-  const neckStartX = useTransform(
-    bubbleX,
-    [4, 35, 50, 65, 96],
-    [4, 4, 8, 16, 30],
+  const { avatarSize, knobSize, gap, gooPadding } = TRANSFER_LAYOUT;
+  const senderCenterX = gooPadding + avatarSize / 2;
+  const receiverCenterX = gooPadding + avatarSize + gap + avatarSize / 2;
+  const centerY = gooPadding + avatarSize / 2;
+  const stageWidth = avatarSize * 2 + gap + gooPadding * 2;
+  const stageHeight = avatarSize + gooPadding * 2;
+
+  const ring = useTransform(progress, [0, 0.08, 0.16, 1], [0, 1, 5, 5]);
+  const blobSize = useTransform(ring, (value) => avatarSize + value * 2);
+
+  const knobX = useTransform(
+    progress,
+    [0, 0.18, 0.32, 0.78, 1],
+    [
+      senderCenterX + 10,
+      senderCenterX + 18,
+      senderCenterX + avatarSize / 2 + 8,
+      receiverCenterX,
+      receiverCenterX,
+    ],
   );
 
-  const neckOpacity = useTransform(bubbleX, [4, 35, 45, 55], [1, 1, 0.5, 0]);
+  const knobScale = useTransform(
+    progress,
+    [0, 0.1, 0.18, 0.78, 0.9, 1],
+    [0, 0, 1, 1, 0.55, 0.2],
+  );
 
-  const neckPath = useTransform(bubbleX, (x) => {
-    const y = 23;
+  const knobOpacity = useTransform(progress, [0, 0.14, 0.8, 0.92, 1], [0, 0, 1, 0.35, 0]);
 
-    const stretch = Math.min(1, Math.max(0, (x - 4) / 31));
-    const collapse = Math.min(1, Math.max(0, (x - 42) / 35));
+  const arrowOpacity = useTransform(
+    progress,
+    [0, 0.16, 0.22, 0.72, 0.8, 1],
+    [0, 0, 1, 1, 0, 0],
+  );
 
-    const startX = 4 + collapse * Math.max(0, x - 8);
-    const distance = x - startX;
-
-    if (distance <= 0) {
-      return "";
-    }
-
-    const startRadius = 4.5 * (1 - collapse);
-    const endRadius = Math.max(0.15, 3.5 - stretch * 2.8);
-
-    const curve = Math.min(distance * 0.55, 16);
-
-    const topStart = y - startRadius;
-    const bottomStart = y + startRadius;
-
-    const topEnd = y - endRadius;
-    const bottomEnd = y + endRadius;
-
-    return `
-     M ${startX} ${topStart}
-
-  C ${startX + curve} ${topStart},
-    ${x - curve} ${topEnd},
-    ${x} ${topEnd}
-
-  C ${x - curve} ${bottomEnd},
-    ${startX + curve} ${bottomStart},
-    ${startX} ${bottomStart}
-
-  Z
-  `;
-  });
+  const senderToolbarOpacity = useTransform(
+    progress,
+    [0, 0.16, 0.22, 0.62, 0.72, 1],
+    [0, 0, 1, 1, 0, 0],
+  );
 
   const receiverToolbarOpacity = useTransform(
-    bubbleX,
-    [4, 50, 70, 96],
+    progress,
+    [0, 0.72, 0.82, 1],
     [0, 0, 1, 1],
   );
 
-  useEffect(() => {
-    const controls = animate(bubbleX, [4, 50, 96], {
-      type: "spring",
-      stiffness: 35,
-      damping: 22,
-      mass: 1.2,
-    });
+  const senderToolbarY = useTransform(senderToolbarOpacity, [0, 1], [8, 0]);
+  const receiverToolbarY = useTransform(receiverToolbarOpacity, [0, 1], [8, 0]);
 
-    return controls.stop;
-  }, [bubbleX]);
+  const senderBlobLeft = useTransform(blobSize, (size) => senderCenterX - size / 2);
+  const receiverBlobLeft = useTransform(blobSize, (size) => receiverCenterX - size / 2);
+  const blobTop = useTransform(blobSize, (size) => centerY - size / 2);
+  const knobLeft = useTransform(knobX, (x) => x - knobSize / 2);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      progress.set(1);
+      return;
+    }
+
+    let cancelled = false;
+    let playback: ReturnType<typeof animate> | undefined;
+
+    async function play() {
+      while (!cancelled) {
+        progress.set(0);
+        await new Promise((resolve) => setTimeout(resolve, TRANSFER_TIMING.initialDelayMs));
+        if (cancelled) return;
+
+        playback = animate(progress, 1, {
+          duration: TRANSFER_TIMING.travelDuration,
+          ease: [0.4, 0, 0.2, 1],
+        });
+        await playback;
+        if (cancelled) return;
+
+        await new Promise((resolve) => setTimeout(resolve, TRANSFER_TIMING.holdMs));
+      }
+    }
+
+    void play();
+
+    return () => {
+      cancelled = true;
+      playback?.stop();
+    };
+  }, [progress, reducedMotion]);
 
   return (
     <section
-      className="mx-3 my-8 max-w-4xl rounded-3xl border border-white/10 bg-surface/70 px-4 py-16 sm:px-8 sm:py-16 md:px-12 md:py-24 sm:mx-6 sm:my-12 md:mx-auto md:my-16 w-[calc(100%-1.5rem)]"
+      className="mx-auto my-8 w-[calc(100%-1.5rem)] max-w-4xl rounded-3xl border border-white/10 bg-zinc-200 px-4 py-16 sm:my-12 sm:px-8 md:my-16 md:px-12 md:py-24"
       aria-label="Money transfer animation"
     >
-      <div className="relative mx-auto aspect-2/1 w-full max-w-3xl">
-        <svg
-          className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
-          viewBox="0 0 100 50"
-          preserveAspectRatio="none"
+      <TransferGooFilter />
+
+      <div
+        className="relative mx-auto"
+        style={{
+          width: stageWidth,
+          height: stageHeight + 56,
+          backgroundImage: "radial-gradient(circle, rgb(24 24 27 / 0.22) 1px, transparent 1px)",
+          backgroundSize: "18px 18px",
+        }}
+      >
+        <div
+          className="absolute inset-x-0 top-0"
+          style={{
+            height: stageHeight,
+            filter: "url(#transfer-goo)",
+          }}
+        >
+          <motion.span
+            className="absolute rounded-full bg-black"
+            style={{
+              width: blobSize,
+              height: blobSize,
+              left: senderBlobLeft,
+              top: blobTop,
+            }}
+          />
+          <motion.span
+            className="absolute rounded-full bg-black"
+            style={{
+              width: blobSize,
+              height: blobSize,
+              left: receiverBlobLeft,
+              top: blobTop,
+            }}
+          />
+          <motion.span
+            className="absolute rounded-full bg-black"
+            style={{
+              width: knobSize,
+              height: knobSize,
+              left: knobLeft,
+              top: centerY - knobSize / 2,
+              scale: knobScale,
+              opacity: knobOpacity,
+            }}
+          />
+        </div>
+
+        <div
+          className="absolute z-20"
+          style={{ left: gooPadding, top: gooPadding }}
+        >
+          <TransferAvatar participant={TRANSFER_PARTICIPANTS.sender} />
+        </div>
+
+        <div
+          className="absolute z-20"
+          style={{
+            left: gooPadding + avatarSize + gap,
+            top: gooPadding,
+          }}
+        >
+          <TransferAvatar participant={TRANSFER_PARTICIPANTS.receiver} />
+        </div>
+
+        <motion.div
+          className="pointer-events-none absolute z-30 flex items-center justify-center text-white"
+          style={{
+            width: knobSize,
+            height: knobSize,
+            left: knobLeft,
+            top: centerY - knobSize / 2,
+            scale: knobScale,
+            opacity: arrowOpacity,
+          }}
           aria-hidden="true"
         >
-          <motion.path
-            d={neckPath}
-            fill="white"
-            style={{ opacity: neckOpacity }}
+          <span className="size-1.5 rounded-full bg-white" />
+          <ArrowRight className="ms-0.5 size-3.5" strokeWidth={2.75} />
+        </motion.div>
+
+        <motion.div
+          className="absolute z-20 flex justify-center"
+          style={{
+            left: gooPadding,
+            top: gooPadding + avatarSize + 12,
+            width: avatarSize,
+            opacity: senderToolbarOpacity,
+            y: senderToolbarY,
+          }}
+        >
+          <TransferToolbar
+            role="sender"
+            balanceLabel={TRANSFER_PARTICIPANTS.sender.balanceLabel}
+            deltaLabel={TRANSFER_PARTICIPANTS.sender.deltaLabel}
           />
-          <motion.circle cx={bubbleX} cy="23" r="3.5" fill="white" />
-          {/* <motion.circle
-            cx={bubbleX}
-            cy="23"
-            r="3.5"
-            fill="white"
-            animate={{
-              cx: [4, 50, 96],
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 35,
-              damping: 22,
-              mass: 1.2,
-            }}
-          /> */}
-        </svg>
-        {/* Sender */}
-        <div className="absolute left-0 top-1/2 flex -translate-y-1/2 flex-col items-center gap-3">
-          <div className="relative size-16 overflow-hidden rounded-full sm:size-20">
-            <Image
-              src={avatars.sender}
-              alt=""
-              fill
-              sizes="80px"
-              className="object-cover"
-            />
-          </div>
+        </motion.div>
 
-          <motion.div
-            className="flex items-center gap-2 text-sm text-foreground"
-            initial={{
-              opacity: 0,
-              y: -5,
-              scale: 0.9,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-              scale: 1,
-            }}
-            transition={{
-              duration: 0.3,
-            }}
-          >
-            <span>$89</span>
-            <span>↗</span>
-          </motion.div>
-
-          {/* <div className="flex items-center gap-2 text-sm text-foreground">
-            <span>$89</span>
-            <span>↗</span>
-          </div> */}
-        </div>
-
-        {/* Receiver */}
-        <div className="absolute right-0 top-1/2 flex -translate-y-1/2 flex-col items-center gap-3">
-          <div className="relative size-16 overflow-hidden rounded-full sm:size-20">
-            <Image
-              src={avatars.receiver}
-              alt=""
-              fill
-              sizes="80px"
-              className="object-cover"
-            />
-          </div>
-          <motion.div
-            className="flex items-center gap-2 text-sm text-foreground"
-            style={{
-              opacity: receiverToolbarOpacity,
-            }}
-          >
-            <span>$89</span>
-            <span>↗</span>
-          </motion.div>
-          {/* <div className="flex items-center gap-2 text-sm text-foreground">
-            <span>$89</span>
-            <span>↗</span>
-          </div> */}
-        </div>
+        <motion.div
+          className="absolute z-20 flex justify-center"
+          style={{
+            left: gooPadding + avatarSize + gap,
+            top: gooPadding + avatarSize + 12,
+            width: avatarSize,
+            opacity: receiverToolbarOpacity,
+            y: receiverToolbarY,
+          }}
+        >
+          <TransferToolbar
+            role="receiver"
+            balanceLabel={TRANSFER_PARTICIPANTS.receiver.balanceLabel}
+            deltaLabel={TRANSFER_PARTICIPANTS.receiver.deltaLabel}
+          />
+        </motion.div>
       </div>
     </section>
   );
