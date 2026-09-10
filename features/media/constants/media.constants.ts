@@ -45,20 +45,6 @@ export const previewVariants = {
   },
 } as const;
 
-export const previewEntranceVariants = {
-  hidden: {
-    y: 80,
-    opacity: 0,
-    scale: 0.85,
-  },
-
-  visible: {
-    y: 0,
-    opacity: 1,
-    scale: 1,
-  },
-} as const;
-
 export const previewTransition = {
   type: "spring",
   stiffness: 90,

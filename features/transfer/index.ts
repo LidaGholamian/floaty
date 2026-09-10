@@ -1,1 +1,1 @@
-export { default } from "./components/transferAnimation";
+export { default as TransferAnimation } from "./components/transferAnimation";

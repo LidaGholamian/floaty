@@ -24,7 +24,7 @@ export default function ThermometerValue({
 
   return (
     <motion.span
-      className="pointer-events-none absolute left-[148px] text-6xl font-extralight tabular-nums tracking-tight"
+      className="pointer-events-none absolute left-37 text-6xl font-extralight tabular-nums tracking-tight"
       style={{
         top,
         y: "-50%",

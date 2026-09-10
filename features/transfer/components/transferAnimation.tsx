@@ -10,11 +10,11 @@ import {
   TRANSFER_PARTICIPANTS,
 } from "../constants/transfer.constants";
 
-import { useTransferAnimation } from "../hooks/useTransferAnimation";
-
 import TransferAvatar from "./transferAvatar";
 import TransferGooFilter from "./transferGooFilter";
 import TransferToolbar from "./transferToolbar";
+
+import { useTransferAnimation } from "../hooks/useTransferAnimation";
 
 export default function TransferAnimation() {
 

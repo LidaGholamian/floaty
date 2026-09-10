@@ -1,11 +1,9 @@
 "use client";
 
 import { motion, type MotionValue, useTransform } from "framer-motion";
-import {
-  KNOB_RADIUS,
-  SCALE_HEIGHT,
-  TRACK_LINE_X,
-} from "../constants/temperature.constants";
+
+import { SCALE_HEIGHT, TRACK_LINE_X } from "../constants/temperature.constants";
+
 import { indentOffset } from "../utils/temperature.utils";
 
 type ThermometerTrackProps = {
@@ -46,7 +44,13 @@ export default function ThermometerTrack({
       aria-hidden="true"
     >
       <defs>
-        <filter id="temperature-line-glow" x="-80%" y="-20%" width="260%" height="140%">
+        <filter
+          id="temperature-line-glow"
+          x="-80%"
+          y="-20%"
+          width="260%"
+          height="140%"
+        >
           <feGaussianBlur stdDeviation="4" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />

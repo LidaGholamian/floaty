@@ -16,6 +16,7 @@ import {
   valueToY,
   yToValue,
 } from "../utils/temperature.utils";
+
 import TemperatureKnob from "./temperatureKnob";
 import ThermometerScale from "./thermometerScale";
 import ThermometerTrack from "./thermometerTrack";
