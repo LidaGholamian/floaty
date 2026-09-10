@@ -1,4 +1,4 @@
-import Thermometer from "@/features/temprature/components/thermometer";
+import { Thermometer } from "@/features/temprature/components";
 
 export default function TemperaturePage() {
   return (

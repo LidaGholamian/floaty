@@ -1,4 +1,4 @@
-import MediaAnimation from "@/features/media/components/mediaAnimation";
+import { MediaAnimation } from "@/features/media/components";
 
 export default function Media() {
   return (
