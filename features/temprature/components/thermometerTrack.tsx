@@ -17,7 +17,7 @@ const INDENT_STEPS = 32;
 
 function circularIndentPath(knobCenterY: number) {
   const x = TRACK_LINE_X;
-  const radius = KNOB_RADIUS;
+  const radius = 80;
   const startY = knobCenterY - radius;
   const endY = knobCenterY + radius;
   const segments = [`M ${x} 0`, `L ${x} ${startY}`];
@@ -47,7 +47,7 @@ export default function ThermometerTrack({
     >
       <defs>
         <filter id="temperature-line-glow" x="-80%" y="-20%" width="260%" height="140%">
-          <feGaussianBlur stdDeviation="2.4" result="blur" />
+          <feGaussianBlur stdDeviation="4" result="blur" />
           <feMerge>
             <feMergeNode in="blur" />
             <feMergeNode in="SourceGraphic" />
@@ -59,11 +59,11 @@ export default function ThermometerTrack({
         d={path}
         fill="none"
         stroke="currentColor"
-        strokeWidth="7"
+        strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
         className="text-transparent"
-        style={{ stroke: glowColor, opacity: 0.45 }}
+        style={{ stroke: glowColor, opacity: 1 }}
         filter="url(#temperature-line-glow)"
       />
 

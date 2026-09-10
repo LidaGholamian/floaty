@@ -44,12 +44,24 @@ export function tickY(index: number) {
 }
 
 export function indentOffset(distanceY: number, radius: number) {
-  const u = Math.abs(distanceY / radius);
+  const ARC_HEIGHT = radius * 0.65;
+
+  const u = Math.abs(distanceY / ARC_HEIGHT);
 
   if (u >= 1) return 0;
 
-  const t = 1 - u;
-  const smooth = t * t * (3 - 2 * t);
+  const t = 1 - u * u;
 
-  return -radius * 0.3 * smooth;
+  return -radius * 0.3 * t;
 }
+
+// export function indentOffset(distanceY: number, radius: number) {
+//   const u = Math.abs(distanceY / radius);
+
+//   if (u >= 1) return 0;
+
+//   const t = 1 - u;
+//   const smooth = t * t * (3 - 2 * t);
+
+//   return -radius * 0.3 * smooth;
+// }

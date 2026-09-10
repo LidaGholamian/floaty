@@ -64,7 +64,7 @@ export default function ThermometerTick({
       ) : null}
 
       <motion.div
-        className={`rounded-full ${tick.type === "major" ? "h-[2px] w-5" : "h-px w-3"}`}
+        className={`rounded-full ${tick.type === "major" ? "h-0.5 w-5" : "h-px w-3"}`}
         style={{ backgroundColor: tickColor, opacity: tickOpacity }}
       />
     </motion.div>
