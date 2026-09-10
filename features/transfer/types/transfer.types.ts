@@ -1,3 +1,5 @@
+import { MotionValue } from "framer-motion";
+
 export type TransferRole = "sender" | "receiver";
 
 export type TransferParticipant = {
@@ -7,4 +9,11 @@ export type TransferParticipant = {
   alt: string;
   balanceLabel: string;
   deltaLabel: string;
+};
+
+export type TransferToolbarProps = {
+  balanceLabel: string;
+  deltaLabel: string;
+  role: TransferRole;
+  progress: MotionValue<number>;
 };

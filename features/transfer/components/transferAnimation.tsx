@@ -52,17 +52,17 @@ export default function TransferAnimation() {
     [0, 0, 1, 1, 0, 0],
   );
 
-  const senderToolbarOpacity = useTransform(
-    progress,
-    [0, 0.16, 0.22, 0.62, 0.72, 1],
-    [0, 0, 1, 1, 0, 0],
-  );
+ const senderToolbarOpacity = useTransform(
+   progress,
+   [0, 0.12, 0.18, 0.68, 0.76, 1],
+   [0, 0, 1, 1, 0, 0],
+ );
 
-  const receiverToolbarOpacity = useTransform(
-    progress,
-    [0, 0.72, 0.82, 1],
-    [0, 0, 1, 1],
-  );
+ const receiverToolbarOpacity = useTransform(
+   progress,
+   [0, 0.74, 0.84, 0.92, 1],
+   [0, 0, 1, 1, 1],
+ );
 
   const senderToolbarY = useTransform(senderToolbarOpacity, [0, 1], [8, 0]);
   const receiverToolbarY = useTransform(receiverToolbarOpacity, [0, 1], [8, 0]);
@@ -118,7 +118,8 @@ export default function TransferAnimation() {
         style={{
           width: stageWidth,
           height: stageHeight + 56,
-          backgroundImage: "radial-gradient(circle, rgb(24 24 27 / 0.22) 1px, transparent 1px)",
+          backgroundImage:
+            "radial-gradient(circle, rgb(24 24 27 / 0.22) 1px, transparent 1px)",
           backgroundSize: "18px 18px",
         }}
       >
@@ -207,6 +208,7 @@ export default function TransferAnimation() {
             role="sender"
             balanceLabel={TRANSFER_PARTICIPANTS.sender.balanceLabel}
             deltaLabel={TRANSFER_PARTICIPANTS.sender.deltaLabel}
+            progress={progress}
           />
         </motion.div>
 
@@ -224,6 +226,7 @@ export default function TransferAnimation() {
             role="receiver"
             balanceLabel={TRANSFER_PARTICIPANTS.receiver.balanceLabel}
             deltaLabel={TRANSFER_PARTICIPANTS.receiver.deltaLabel}
+            progress={progress}
           />
         </motion.div>
       </div>
