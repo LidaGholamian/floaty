@@ -28,15 +28,18 @@ export default function TransferAnimation() {
 
   const knobX = useTransform(
     progress,
-    [0, 0.18, 0.32, 0.78, 1],
+    [0, 0.18, 0.3, 0.36, 0.43, 0.78, 1],
     [
       senderCenterX + 10,
       senderCenterX + 18,
-      senderCenterX + avatarSize / 2 + 8,
+      senderCenterX + 40,
+      senderCenterX + 32,
+      senderCenterX + 55,
       receiverCenterX,
       receiverCenterX,
     ],
   );
+
 
   const knobScale = useTransform(
     progress,
@@ -48,7 +51,7 @@ export default function TransferAnimation() {
 
   const arrowOpacity = useTransform(
     progress,
-    [0, 0.16, 0.22, 0.72, 0.8, 1],
+    [0, 0.36, 0.48, 0.72, 0.8, 1],
     [0, 0, 1, 1, 0, 0],
   );
 

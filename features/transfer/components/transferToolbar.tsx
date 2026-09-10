@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useTransform } from "framer-motion";
-import type { MotionValue } from "framer-motion";
 
 import type { TransferToolbarProps } from "../types/transfer.types";
 
@@ -11,7 +10,7 @@ export default function TransferToolbar({
   role,
   progress,
 }: TransferToolbarProps) {
-  
+
  const animatedDeltaValue = useTransform(progress, [0.18, 0.55], [-33, -56]);
 
  const animatedDelta = useTransform(animatedDeltaValue, (value) =>
