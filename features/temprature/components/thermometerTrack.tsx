@@ -46,14 +46,17 @@ export default function ThermometerTrack({
       <defs>
         <filter
           id="temperature-line-glow"
-          x="-80%"
-          y="-20%"
-          width="260%"
-          height="140%"
+          x="-150%"
+          y="-100%"
+          width="400%"
+          height="300%"
         >
-          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feGaussianBlur stdDeviation="14" result="outerGlow" />
+          <feGaussianBlur stdDeviation="7" result="innerGlow" />
+
           <feMerge>
-            <feMergeNode in="blur" />
+            <feMergeNode in="outerGlow" />
+            <feMergeNode in="innerGlow" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
