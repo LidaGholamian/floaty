@@ -31,6 +31,11 @@ export default function MediaAnimation() {
     (preview) => preview.id === expandedPreviewId,
   );
 
+  const handleCancel = () => {
+    setSelectedPreviewId(null);
+    setExpandedPreviewId(null);
+  };
+
   return (
     <section className="flex min-h-[70vh] items-center justify-center">
       <div className="relative my-2 h-120 w-75 overflow-hidden rounded-[40px] border border-white/10 sm:h-137.5">
@@ -48,8 +53,8 @@ export default function MediaAnimation() {
               key="detail"
               id={selectedPreview.id}
               image={selectedPreview.src}
-              artist={selectedPreview.artist}
               title={selectedPreview.title}
+              onCancel={handleCancel}
             />
           ) : (
             <div

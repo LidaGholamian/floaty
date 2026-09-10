@@ -11,6 +11,6 @@ export type MediaPreviewProps = {
 export type MediaDetailProps = {
   id: number;
   image: string;
-  artist: string;
   title: string;
+  onCancel: () => void;
 };

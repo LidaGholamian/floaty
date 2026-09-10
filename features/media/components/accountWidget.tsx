@@ -4,7 +4,7 @@ import { BatteryCharging } from "lucide-react";
 
 export default function AccountWidget() {
   return (
-    <div className="absolute right-5 top-12 flex h-44 w-12 -translate-y-1/8 flex-col items-center justify-between rounded-3xl bg-black px-2.5 py-3 text-white">
+    <div className="absolute right-5 top-12 flex h-40 w-12 -translate-y-1/8 flex-col items-center justify-between rounded-3xl bg-black px-2 py-2 text-white">
       <div className="flex flex-col items-center gap-2">
         <div className="h-7 w-7 overflow-hidden rounded-full bg-zinc-700">
           <div className="h-full w-full bg-linear-to-br from-purple-300 to-purple-700" />
